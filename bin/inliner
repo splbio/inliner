@@ -62,10 +62,13 @@ fs.realpath(__filename, function(error, script) {
 
   var url = program.args[0];
 
-  if (fs.existsSync(url)) {
+  try {
+    fs.accessSync(url);
+  } catch (ex) {
     // then it's a file
-  } else if (url.indexOf('http') !== 0) {
-    url = 'http://' + url;
+    if (url.indexOf('http') !== 0) {
+      url = 'http://' + url;
+    }
   }
 
   var inliner = new Inliner(url, options, function (html) {
